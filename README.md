@@ -5,7 +5,10 @@ Gopher Dispatch is a local control plane for a delivery-service development envi
 ## Features
 
 - Concurrent management of configured local services
-- TCP health checks with PID and startup-time reporting
+- Formal service states: stopped, starting, running, unhealthy, stopping, and failed
+- Dependency-aware startup and reverse dependency shutdown with cycle validation
+- TCP health checks, bounded startup timeouts, failure retries, and exponential backoff
+- Bounded in-memory stdout/stderr history exposed through the API and CLI
 - Native Windows port-to-process discovery using `GetExtendedTcpTable`
 - HTTP/1.1 control API built with Shadowfax
 - Live lifecycle event stream using newline-delimited JSON
@@ -36,6 +39,7 @@ Inspect a port or stop a service:
 ```powershell
 go run ./cmd/dispatch port 8081
 go run ./cmd/dispatch stop orders
+go run ./cmd/dispatch logs orders
 ```
 
 ## API
@@ -44,6 +48,7 @@ go run ./cmd/dispatch stop orders
 | --- | --- | --- |
 | GET | `/health` | Control-plane health check |
 | GET | `/services` | Service health and process state |
+| GET | `/services/:name/logs` | Last 200 stdout/stderr lines for one service |
 | GET | `/metrics` | Uptime, request count, and service totals |
 | POST | `/services/start` | Start all configured services |
 | POST | `/services/:name/start` | Start one service |

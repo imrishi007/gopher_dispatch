@@ -35,6 +35,12 @@ func main() {
 			return
 		}
 		path = "/ports/" + args[1]
+	case "logs":
+		if len(args) != 2 {
+			usage()
+			return
+		}
+		path = "/services/" + args[1] + "/logs"
 	default:
 		usage()
 		return
@@ -55,4 +61,6 @@ func main() {
 	}
 	fmt.Println(string(b))
 }
-func usage() { fmt.Println("dispatch [status|up|start <service>|stop <service>|port <number>]") }
+func usage() {
+	fmt.Println("dispatch [status|up|start <service>|stop <service>|logs <service>|port <number>]")
+}

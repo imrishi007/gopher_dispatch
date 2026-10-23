@@ -35,6 +35,13 @@ func main() {
 	r.Use(logRequest(metrics))
 	r.Get("/health", func(*request.Request) response.Response { return jsonResponse(map[string]string{"status": "ok"}) })
 	r.Get("/services", func(*request.Request) response.Response { return jsonResponse(m.Statuses()) })
+	r.Get("/services/:name/logs", func(req *request.Request) response.Response {
+		logs, err := m.Logs(req.PathParams["name"])
+		if err != nil {
+			return bad(err)
+		}
+		return jsonResponse(logs)
+	})
 	r.Get("/metrics", func(*request.Request) response.Response { return jsonResponse(metrics.snapshot(m.Statuses())) })
 	r.Post("/services/start", func(*request.Request) response.Response { return result(servicesErrors(m.StartAll())) })
 	r.Post("/services/:name/start", func(req *request.Request) response.Response { return result(m.Start(req.PathParams["name"])) })

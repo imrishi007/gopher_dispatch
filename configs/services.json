@@ -1,5 +1,5 @@
 [
-  {"name":"orders","command":"go","args":["run","./cmd/mock-service","-name","orders","-port","8081"],"port":8081},
-  {"name":"payments","command":"go","args":["run","./cmd/mock-service","-name","payments","-port","8082"],"port":8082},
-  {"name":"delivery","command":"go","args":["run","./cmd/mock-service","-name","delivery","-port","8083"],"port":8083}
+  {"name":"orders","command":"go","args":["run","./cmd/mock-service","-name","orders","-port","8081"],"port":8081,"startupTimeoutMs":15000,"restart":{"onFailure":true,"maxAttempts":3,"initialBackoffMs":500}},
+  {"name":"payments","command":"go","args":["run","./cmd/mock-service","-name","payments","-port","8082"],"port":8082,"startupTimeoutMs":15000,"restart":{"onFailure":true,"maxAttempts":3,"initialBackoffMs":500}},
+  {"name":"delivery","command":"go","args":["run","./cmd/mock-service","-name","delivery","-port","8083"],"port":8083,"dependencies":["orders","payments"],"startupTimeoutMs":15000,"restart":{"onFailure":true,"maxAttempts":3,"initialBackoffMs":500}}
 ]
